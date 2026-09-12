@@ -1,0 +1,6 @@
+target/
+*.class
+.idea/
+.vscode/
+database.properties
+*.log

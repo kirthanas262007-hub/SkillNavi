@@ -1,22 +1,26 @@
 package com.skillnavi.model;
 
 public class Student {
+
     private Integer studentId;
     private String name;
     private String email;
-    private String education;
+    private String department;
+    private Integer year;
 
     public Student() {
     }
 
-    public Student(String name, String email, String education) {
+    public Student(String name, String email, String department, Integer year) {
         this.name = name;
         this.email = email;
-        this.education = education;
+        this.department = department;
+        this.year = year;
     }
 
-    public Student(Integer studentId, String name, String email, String education) {
-        this(name, email, education);
+    public Student(Integer studentId, String name, String email,
+                   String department, Integer year) {
+        this(name, email, department, year);
         this.studentId = studentId;
     }
 
@@ -44,12 +48,20 @@ public class Student {
         this.email = email;
     }
 
-    public String getEducation() {
-        return education;
+    public String getDepartment() {
+        return department;
     }
 
-    public void setEducation(String education) {
-        this.education = education;
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public Integer getYear() {
+        return year;
+    }
+
+    public void setYear(Integer year) {
+        this.year = year;
     }
 
     @Override

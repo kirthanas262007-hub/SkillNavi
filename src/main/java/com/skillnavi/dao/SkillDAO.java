@@ -1,3 +1,5 @@
+
+
 package com.skillnavi.dao;
 
 import com.skillnavi.model.Skill;
@@ -13,36 +15,59 @@ import java.util.List;
 import java.util.Optional;
 
 public class SkillDAO {
+
+    // Retrieve all available skills from the database
     public List<Skill> findAll() {
-        String sql = "SELECT skill_id, skill_name, category FROM SKILL ORDER BY skill_name";
+        String sql =
+                "SELECT skill_id, skill_name, category " +
+                "FROM skills ORDER BY skill_name";
+
         List<Skill> skills = new ArrayList<>();
 
         try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql);
+             PreparedStatement statement =
+                     connection.prepareStatement(sql);
              ResultSet resultSet = statement.executeQuery()) {
+
             while (resultSet.next()) {
                 skills.add(mapSkill(resultSet));
             }
-            return skills;
+
         } catch (SQLException exception) {
-            throw new DatabaseException("Unable to retrieve skills.", exception);
+            throw new DatabaseException(
+                    "Unable to retrieve skills.", exception);
         }
+
+        return skills;
     }
 
+    // Retrieve one skill using its ID
     public Optional<Skill> findById(int skillId) {
-        String sql = "SELECT skill_id, skill_name, category FROM SKILL WHERE skill_id = ?";
+        String sql =
+                "SELECT skill_id, skill_name, category " +
+                "FROM skills WHERE skill_id = ?";
 
         try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+             PreparedStatement statement =
+                     connection.prepareStatement(sql)) {
+
             statement.setInt(1, skillId);
+
             try (ResultSet resultSet = statement.executeQuery()) {
-                return resultSet.next() ? Optional.of(mapSkill(resultSet)) : Optional.empty();
+                if (resultSet.next()) {
+                    return Optional.of(mapSkill(resultSet));
+                }
+
+                return Optional.empty();
             }
+
         } catch (SQLException exception) {
-            throw new DatabaseException("Unable to retrieve the selected skill.", exception);
+            throw new DatabaseException(
+                    "Unable to retrieve the selected skill.", exception);
         }
     }
 
+    // Convert a database row into a Skill object
     private Skill mapSkill(ResultSet resultSet) throws SQLException {
         return new Skill(
                 resultSet.getInt("skill_id"),

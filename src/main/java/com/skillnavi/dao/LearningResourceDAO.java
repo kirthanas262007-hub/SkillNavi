@@ -1,3 +1,4 @@
+
 package com.skillnavi.dao;
 
 import com.skillnavi.model.LearningResource;
@@ -13,43 +14,50 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LearningResourceDAO {
+
     public List<LearningResource> findBySkillId(int skillId) {
         String sql = """
-                SELECT lr.resource_id, lr.resource_name, lr.resource_type, lr.resource_link,
+                SELECT lr.resource_id, lr.resource_name,
+                       lr.resource_type, lr.resource_link,
                        s.skill_id, s.skill_name, s.category
-                FROM LEARNING_RESOURCE lr
-                JOIN SKILL s ON s.skill_id = lr.skill_id
+                FROM learning_resources lr
+                JOIN skills s ON s.skill_id = lr.skill_id
                 WHERE lr.skill_id = ?
                 ORDER BY lr.resource_name
                 """;
+
         List<LearningResource> resources = new ArrayList<>();
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
+
             statement.setInt(1, skillId);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                while (resultSet.next()) {
-                    resources.add(mapResource(resultSet));
+
+            try (ResultSet rs = statement.executeQuery()) {
+                while (rs.next()) {
+                    Skill skill = new Skill(
+                            rs.getInt("skill_id"),
+                            rs.getString("skill_name"),
+                            rs.getString("category")
+                    );
+
+                    resources.add(new LearningResource(
+                            rs.getInt("resource_id"),
+                            skill,
+                            rs.getString("resource_name"),
+                            rs.getString("resource_type"),
+                            rs.getString("resource_link")
+                    ));
                 }
             }
-            return resources;
-        } catch (SQLException exception) {
-            throw new DatabaseException("Unable to retrieve learning resources.", exception);
-        }
-    }
 
-    private LearningResource mapResource(ResultSet resultSet) throws SQLException {
-        Skill skill = new Skill(
-                resultSet.getInt("skill_id"),
-                resultSet.getString("skill_name"),
-                resultSet.getString("category")
-        );
-        return new LearningResource(
-                resultSet.getInt("resource_id"),
-                skill,
-                resultSet.getString("resource_name"),
-                resultSet.getString("resource_type"),
-                resultSet.getString("resource_link")
-        );
+            return resources;
+
+        } catch (SQLException exception) {
+            throw new DatabaseException(
+                    "Unable to retrieve learning resources.",
+                    exception
+            );
+        }
     }
 }

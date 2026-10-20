@@ -1,3 +1,4 @@
+
 package com.skillnavi.dao;
 
 import com.skillnavi.model.Skill;
@@ -14,81 +15,111 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StudentSkillDAO {
+
     public List<StudentSkill> findByStudentId(int studentId) {
         String sql = """
-                SELECT ss.student_id, ss.proficiency_level, s.skill_id, s.skill_name, s.category
-                FROM STUDENT_SKILL ss
-                JOIN SKILL s ON s.skill_id = ss.skill_id
+                SELECT ss.student_id, ss.skill_level,
+                       s.skill_id, s.skill_name, s.category
+                FROM student_skills ss
+                JOIN skills s ON s.skill_id = ss.skill_id
                 WHERE ss.student_id = ?
                 ORDER BY s.skill_name
                 """;
+
         List<StudentSkill> studentSkills = new ArrayList<>();
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
+
             statement.setInt(1, studentId);
+
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     studentSkills.add(mapStudentSkill(resultSet));
                 }
             }
+
             return studentSkills;
+
         } catch (SQLException exception) {
-            throw new DatabaseException("Unable to retrieve the student's skills.", exception);
+            throw new DatabaseException(
+                    "Unable to retrieve the student's skills.", exception);
         }
     }
 
     public void saveOrUpdate(StudentSkill studentSkill) {
         validateStudentSkill(studentSkill);
+
         String sql = """
-                INSERT INTO STUDENT_SKILL (student_id, skill_id, proficiency_level)
+                INSERT INTO student_skills
+                    (student_id, skill_id, skill_level)
                 VALUES (?, ?, ?)
-                ON DUPLICATE KEY UPDATE proficiency_level = ?
+                ON DUPLICATE KEY UPDATE
+                    skill_level = VALUES(skill_level)
                 """;
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
+
             statement.setInt(1, studentSkill.getStudentId());
             statement.setInt(2, studentSkill.getSkill().getSkillId());
-            statement.setString(3, studentSkill.getProficiencyLevel().name());
-            statement.setString(4, studentSkill.getProficiencyLevel().name());
+            statement.setInt(
+                    3, studentSkill.getProficiencyLevel().getNumericValue());
+
             statement.executeUpdate();
+
         } catch (SQLException exception) {
-            throw new DatabaseException("Unable to save the student's skill.", exception);
+            throw new DatabaseException(
+                    "Unable to save the student's skill.", exception);
         }
     }
 
     public void delete(int studentId, int skillId) {
-        String sql = "DELETE FROM STUDENT_SKILL WHERE student_id = ? AND skill_id = ?";
+        String sql = """
+                DELETE FROM student_skills
+                WHERE student_id = ? AND skill_id = ?
+                """;
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
+
             statement.setInt(1, studentId);
             statement.setInt(2, skillId);
             statement.executeUpdate();
+
         } catch (SQLException exception) {
-            throw new DatabaseException("Unable to remove the student's skill.", exception);
+            throw new DatabaseException(
+                    "Unable to remove the student's skill.", exception);
         }
     }
 
-    private StudentSkill mapStudentSkill(ResultSet resultSet) throws SQLException {
+    private StudentSkill mapStudentSkill(ResultSet resultSet)
+            throws SQLException {
+
         Skill skill = new Skill(
                 resultSet.getInt("skill_id"),
                 resultSet.getString("skill_name"),
                 resultSet.getString("category")
         );
+
         return new StudentSkill(
                 resultSet.getInt("student_id"),
                 skill,
-                ProficiencyLevel.fromDatabaseValue(resultSet.getString("proficiency_level"))
+                ProficiencyLevel.fromDatabaseValue(
+                        String.valueOf(resultSet.getInt("skill_level")))
         );
     }
 
     private void validateStudentSkill(StudentSkill studentSkill) {
-        if (studentSkill == null || studentSkill.getStudentId() <= 0
-                || studentSkill.getSkill() == null || studentSkill.getSkill().getSkillId() == null
+        if (studentSkill == null
+                || studentSkill.getStudentId() <= 0
+                || studentSkill.getSkill() == null
+                || studentSkill.getSkill().getSkillId() == null
                 || studentSkill.getProficiencyLevel() == null) {
-            throw new IllegalArgumentException("Student, skill, and proficiency level are required.");
+
+            throw new IllegalArgumentException(
+                    "Student, skill, and proficiency level are required.");
         }
     }
 }
+

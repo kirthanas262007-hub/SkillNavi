@@ -19,9 +19,8 @@ public class ProgressDAO {
         String sql = """
                 SELECT p.student_id, p.progress_percentage, p.status,
                        s.skill_id, s.skill_name, s.category
-                FROM PROGRESS p
-                JOIN SKILL s ON s.skill_id = p.skill_id
-                WHERE p.student_id = ?
+                FROM progress p
+JOIN skills s ON s.skill_id = p.skill_id                WHERE p.student_id = ?
                 ORDER BY s.skill_name
                 """;
         List<Progress> progressEntries = new ArrayList<>();
@@ -36,14 +35,20 @@ public class ProgressDAO {
             }
             return progressEntries;
         } catch (SQLException exception) {
-            throw new DatabaseException("Unable to retrieve progress entries.", exception);
-        }
+    exception.printStackTrace();
+
+    throw new DatabaseException(
+            "Unable to retrieve progress entries: "
+                    + exception.getMessage(),
+            exception
+    );
+}
     }
 
     public void saveOrUpdate(Progress progress) {
         validateProgress(progress);
         String sql = """
-                INSERT INTO PROGRESS (student_id, skill_id, progress_percentage, status)
+                INSERT INTO progress (student_id, skill_id, progress_percentage, status)
                 VALUES (?, ?, ?, ?)
                 ON DUPLICATE KEY UPDATE progress_percentage = ?, status = ?
                 """;

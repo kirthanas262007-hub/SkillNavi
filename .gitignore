@@ -4,3 +4,5 @@ target/
 .vscode/
 database.properties
 *.log
+
+*.zip

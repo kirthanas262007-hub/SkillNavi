@@ -1,181 +1,214 @@
 # SkillNavi – Student Skill Gap Analyzer and Career Readiness System
 
-**SkillNavi** is a Java-based desktop application designed to help students evaluate their technical skills, identify skill gaps and assess their readiness for specific career roles. It compares a student's current proficiency with predefined industry-oriented job-role requirements and provides a structured learning roadmap to improve career readiness.
+SkillNavi is a Java-based desktop application designed to help students evaluate their technical skills, identify skill gaps, and understand their readiness for selected career roles.
 
-## 1. Project Overview
+The system allows students to create accounts, log in using their email and password, assess their proficiency in different technical skills, and compare their current abilities with the skills required for their target job roles.
 
-Students often find it difficult to understand which technical skills are required for their desired career and how their current abilities compare with those requirements.
+Based on this analysis, SkillNavi calculates a career-readiness score and generates a personalized learning roadmap to help students improve their skills.
 
-SkillNavi addresses this problem through a centralized platform that enables students to:
-- Create an account and log in using email and password.
-- Maintain their student profile.
+---
+
+## 🎯 Objectives
+
+- Provide a structured platform for students to assess their technical skills.
+- Identify the gap between existing skills and industry-required skills.
+- Help students select suitable target job roles.
+- Calculate career-readiness scores based on skill matching.
+- Generate learning roadmaps to improve technical proficiency.
+- Track learning progress and access relevant learning resources.
+
+---
+
+## ✨ Key Features
+
+### 1. User Registration and Login
+- New users can create an account.
+- Existing users can log in using their email address and password.
+- User profiles are maintained in the database.
+
+### 2. Student Profile Management
+- Maintain student information.
+- Manage individual student profiles.
+
+### 3. Technical Skill Assessment
 - Add and update technical skills.
-- Assess their proficiency levels.
-- Select a target job role.
-- Identify missing and insufficient skills.
-- Calculate career readiness.
-- Generate a priority-based learning roadmap.
-- Access learning resources.
-- Track learning progress.
-
-## 2. Objectives
-
-- Develop a user-friendly student skill assessment system.
-- Compare existing skills against predefined job-role requirements.
-- Identify technical skill gaps.
-- Calculate career readiness using proficiency-based comparisons.
-- Recommend a structured learning roadmap.
-- Provide a platform for continuous skill development and progress tracking.
-
-## 3. Key Features
-
-### User Authentication
-- Email and password-based registration and login.
-- Account-based access to student profiles.
-- Credential verification during login.
-
-### Student Profile Management
-- Create and maintain student profiles.
-- Retrieve existing student information.
-
-### Skill Assessment
-- Add, update and manage technical skills.
-- Assign proficiency levels:
+- Select proficiency levels:
   - Beginner
   - Intermediate
   - Advanced
 
-### Job Role Selection
-- Select a desired career role.
-- Retrieve the technical skills required for the selected role.
+### 4. Target Job Role Selection
+- Browse available job roles.
+- Select a target career role.
+- Identify the technical skills required for the selected role.
 
-### Skill Gap Analysis
-Compares student proficiency with job-role requirements and classifies skills into:
+### 5. Skill Gap Analysis
+- Compare student skills with job-role requirements.
+- Classify skills as:
+  - Matched
+  - Needs Improvement
+  - Missing
 
-| Status | Description |
-|---|---|
-| MATCHED | Student proficiency meets or exceeds the requirement. |
-| NEEDS_IMPROVEMENT | Student has the skill but does not meet the required proficiency. |
-| MISSING | Student has not added the required skill. |
+### 6. Career Readiness Score
+- Calculate a readiness percentage based on matched required skills.
+- Display the student's current career readiness.
 
-### Career Readiness Calculation
+### 7. Personalized Learning Roadmap
+- Generate a roadmap based on identified skill gaps.
+- Prioritize skills that need improvement.
 
-SkillNavi calculates career readiness based on the number of matched skills compared with the total required skills.
+### 8. Learning Resources
+- Provide relevant learning resources to support skill development.
 
-**Formula:**
+### 9. Progress Tracking
+- Monitor learning progress.
+- Maintain records of progress over time.
 
-Readiness Score = (Matched Required Skills / Total Required Skills) × 100
+---
 
-### Learning Roadmap
-- Identifies skills requiring improvement.
-- Prioritizes learning activities.
-- Generates a structured roadmap based on identified gaps.
-
-### Learning Resources
-- Provides learning resources associated with technical skills.
-
-### Progress Tracking
-- Enables students to monitor their learning progress.
-
-## 4. Technology Stack
+## 🛠️ Technology Stack
 
 | Component | Technology |
 |---|---|
 | Programming Language | Java |
 | Frontend | Java Swing |
-| Application Logic | Java |
+| Backend Logic | Java |
 | Database | MySQL |
 | Database Connectivity | JDBC |
 | Build Tool | Apache Maven |
 | Testing | JUnit 5 |
+| IDE | Visual Studio Code |
 | Version Control | Git and GitHub |
-| Development Environment | Visual Studio Code / IntelliJ IDEA |
 
-## 5. System Architecture
+---
 
-SkillNavi follows a layered architecture that separates the user interface, business logic and database operations.
+## 🏗️ System Architecture
+
+SkillNavi follows a layered architecture that separates the user interface, business logic, database operations, and data storage.
+
+```text
+              USER
+                |
+                v
+       PRESENTATION LAYER
+           Java Swing
+                |
+                v
+         SERVICE LAYER
+       Business Logic
+                |
+                v
+           DAO LAYER
+       Database Operations
+                |
+                v
+          JDBC CONNECTIVITY
+                |
+                v
+          MySQL DATABASE
+```
+
+### Layers Explained
 
 **1. Presentation Layer**
 - Developed using Java Swing.
-- Provides forms, buttons, tables, dashboards and navigation.
+- Provides forms, buttons, tables, dashboards, and navigation.
+- Accepts user input and displays results.
 
 **2. Service Layer**
-- Handles application business logic.
+- Contains the application's main business logic.
 - Performs skill-gap analysis.
-- Calculates career readiness.
+- Calculates career-readiness scores.
 - Generates learning roadmaps.
 
-**3. DAO (Data Access Object) Layer**
+**3. Data Access Object (DAO) Layer**
 - Handles database operations.
-- Uses JDBC and SQL queries.
-- Separates database access from application logic.
+- Uses JDBC to execute SQL queries.
+- Separates database logic from the user interface and business logic.
 
 **4. Database Layer**
-- Uses MySQL to store student accounts, profiles, skills, job roles, learning resources and progress information.
+- MySQL stores student details, skills, job roles, learning resources, and progress information.
 
-### Architecture Flow
+---
 
-Student → Java Swing UI → Service Layer → DAO Layer → JDBC → MySQL Database
+## 🧠 Skill Gap Analysis Algorithm
 
-## 6. Object-Oriented Programming Concepts
-
-SkillNavi applies the four fundamental OOP concepts.
-
-### Encapsulation
-- Data members are declared private in model classes.
-- Getter and setter methods provide controlled access to object data.
-- Examples: Student, Skill, JobRole and other model classes.
-
-### Abstraction
-- Implemented through the DAO layer.
-- Database operations and SQL implementation details are hidden behind reusable methods.
-- Examples: StudentDAO, SkillDAO and StudentSkillDAO.
-
-### Inheritance
-- Implemented by extending Java Swing classes.
-- MainFrame extends JFrame.
-- Individual screen panels extend JPanel.
-
-### Polymorphism
-- Implemented through method overriding in custom Swing components and table models.
-- Custom table models provide their own implementations of inherited methods such as getRowCount() and getValueAt().
-
-## 7. Skill Gap Analysis Algorithm
-
-1. Retrieve the student's selected job role.
-2. Retrieve the skills required for that role.
-3. Retrieve the student's existing skills and proficiency levels.
-4. Compare the student's proficiency against the required proficiency.
-5. Classify each skill as MATCHED, NEEDS_IMPROVEMENT or MISSING.
-6. Calculate the readiness percentage.
-7. Generate a priority-based learning roadmap.
+SkillNavi compares the student's proficiency with the proficiency required for a selected job role.
 
 ### Proficiency Mapping
 
-| Proficiency | Numeric Value |
+| Proficiency Level | Numeric Value |
 |---|---:|
 | Beginner | 1 |
 | Intermediate | 2 |
 | Advanced | 3 |
 
-## 8. Database Design
+### Skill Classification
 
-SkillNavi uses MySQL for persistent data storage.
+- **Matched:** Student proficiency meets or exceeds the required proficiency.
+- **Needs Improvement:** Student has the skill, but the proficiency is below the required level.
+- **Missing:** Student has not added the required skill.
 
-The database manages information related to:
+### Career Readiness Formula
 
-- Student accounts and profiles
-- Technical skills
-- Student proficiency levels
-- Job roles
-- Job-role skill requirements
-- Selected target roles
-- Learning resources
-- Learning progress
+\[
+\text{Readiness Score} =
+\frac{\text{Matched Required Skills}}
+{\text{Total Required Skills}}\times100
+\]
 
-The application uses JDBC to communicate with the database.
+**Example:**
 
-## 9. Project Structure
+If a job role requires five skills and a student matches three of them:
+
+\[
+\frac{3}{5}\times100=60\%
+\]
+
+Therefore, the student's career-readiness score is **60%**.
+
+The system uses rule-based logic to perform the analysis.
+
+---
+
+## 💻 Object-Oriented Programming Concepts
+
+SkillNavi applies the fundamental concepts of Object-Oriented Programming.
+
+| OOP Concept | Implementation |
+|---|---|
+| Encapsulation | Model classes maintain data through fields and methods. |
+| Abstraction | DAO classes hide database implementation details. |
+| Inheritance | Swing classes extend framework classes such as JFrame and JPanel. |
+| Polymorphism | Method overriding is used in custom table models and UI components. |
+
+These concepts help improve code organization, reusability, and maintainability.
+
+---
+
+## 🗄️ Database
+
+The application uses MySQL for persistent data storage.
+
+The database is named:
+
+`student_skill_gap`
+
+Core database tables include:
+
+- `students`
+- `skills`
+- `student_skills`
+- `job_role`
+- `student_target_role`
+
+Additional tables support learning resources and progress tracking where configured in the project.
+
+---
+
+## 📂 Project Structure
+
+The project follows a Maven-based Java application structure.
 
 ```text
 SkillNavi/
@@ -185,9 +218,8 @@ SkillNavi/
 │   │   ├── java/
 │   │   │   └── com/skillnavi/
 │   │   │       ├── App.java
-│   │   │       ├── model/
-│   │   │       ├── model/enums/
 │   │   │       ├── dao/
+│   │   │       ├── model/
 │   │   │       ├── service/
 │   │   │       ├── ui/
 │   │   │       └── util/
@@ -197,73 +229,94 @@ SkillNavi/
 │   └── test/
 │       └── java/
 │
-├── database/
-│   └── schema.sql
-│
 ├── pom.xml
-└── README.md
+├── README.md
+└── .gitignore
 ```
 
-## 10. Installation and Execution
+---
+
+## ⚙️ Installation and Execution
 
 ### Prerequisites
-- Java Development Kit (JDK 17 or later)
+
+Make sure the following are installed:
+
+- Java Development Kit (JDK)
 - Apache Maven
-- MySQL Server 8.0 or later
+- MySQL Server
 - Git
 
-### Step 1: Clone the repository
+### Step 1: Clone the Repository
 
 ```bash
 git clone https://github.com/kirthanas262007-hub/SkillNavi.git
 ```
 
-### Step 2: Navigate to the project
+### Step 2: Navigate to the Project
 
 ```bash
 cd SkillNavi
 ```
 
-### Step 3: Configure the database
+### Step 3: Configure MySQL
 
-- Start the MySQL server.
-- Create the required database.
-- Execute the SQL schema script.
-- Configure the database connection properties using your local credentials.
+1. Start the MySQL server.
+2. Create the `student_skill_gap` database.
+3. Configure the database connection details in the project's database configuration file.
+4. Ensure that the required database tables are created.
 
-### Step 4: Build the project
+### Step 4: Build the Project
 
 ```bash
 mvn clean compile
 ```
 
-### Step 5: Run the application
+### Step 5: Run the Application
 
-```bash
+For Windows PowerShell:
+
+```powershell
 mvn exec:java "-Dexec.mainClass=com.skillnavi.App"
 ```
 
-## 11. Future Enhancements
+---
 
-- Introduce AI-assisted personalized career recommendations.
-- Expand the collection of job roles and industry skill requirements.
-- Integrate external learning platforms.
-- Develop a web-based version for broader accessibility.
-- Add advanced progress analytics.
-- Improve authentication and account security.
+## 🚀 Future Enhancements
 
-## 12. Project Information
+- Integration of AI-based career recommendations.
+- Resume analysis and skill extraction.
+- Integration with external job-market APIs.
+- Advanced analytics and visual dashboards.
+- Personalized recommendations based on industry trends.
+- Web-based and mobile application versions.
+
+---
+
+## 👩‍💻 Project Information
 
 **Project Name:** SkillNavi – Student Skill Gap Analyzer and Career Readiness System
 
-**Domain:** Java Application Development / Career Readiness
+**Domain:** Java Application Development
 
 **Programming Language:** Java
 
 **Database:** MySQL
 
-**Repository:** https://github.com/kirthanas262007-hub/SkillNavi
+**Project Type:** Desktop Application
+
+**Developed as part of:** Object Oriented Programming Using Java
+
+**Institution:** Easwari Engineering College, Ramapuram, Chennai
 
 ---
 
-*SkillNavi aims to bridge the gap between students' current technical abilities and their desired career requirements through structured skill assessment, analysis and continuous learning.*
+## 🔗 GitHub Repository
+
+[https://github.com/kirthanas262007-hub/SkillNavi](https://github.com/kirthanas262007-hub/SkillNavi)
+
+---
+
+## 📌 Conclusion
+
+SkillNavi provides students with a structured approach to understanding their technical capabilities and preparing for career opportunities. By combining skill assessment, job-role comparison, readiness calculation, and personalized learning roadmaps, the application helps students identify areas for improvement and work towards becoming career-ready.
